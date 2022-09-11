@@ -124,18 +124,18 @@ func (light *HueLight) setLightState(colorTemperature int, brightness int, trans
 		colorTemperature = light.MinimumColorTemperature
 		log.Debugf("💡 Light %s - Adjusted color temperature to light capability of %dK", light.Name, colorTemperature)
 	}
-	if brightness == -1 {
-		brightness = light.CurrentBrightness
-	}
-
 
 	light.SetColorTemperature = colorTemperature
-	light.SetBrightness = brightness
+	if brightness != -1 {
+		light.SetBrightness = brightness
+	}
 
 	// map parameters to target values
 	light.TargetColorTemperature = mapColorTemperature(colorTemperature)
 	light.TargetColor = colorTemperatureToXYColor(colorTemperature)
-	light.TargetBrightness = mapBrightness(brightness)
+	if brightness != -1 {
+		light.TargetBrightness = mapBrightness(brightness)
+	}
 
 	// Send new state to light bulb
 	var hueLightState hue.SetLightState
