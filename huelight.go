@@ -124,6 +124,10 @@ func (light *HueLight) setLightState(colorTemperature int, brightness int, trans
 		colorTemperature = light.MinimumColorTemperature
 		log.Debugf("💡 Light %s - Adjusted color temperature to light capability of %dK", light.Name, colorTemperature)
 	}
+	if brightness == -1 {
+		brightness = light.CurrentBrightness
+	}
+
 
 	light.SetColorTemperature = colorTemperature
 	light.SetBrightness = brightness
