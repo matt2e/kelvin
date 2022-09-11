@@ -133,7 +133,9 @@ func (light *HueLight) setLightState(colorTemperature int, brightness int, trans
 	// map parameters to target values
 	light.TargetColorTemperature = mapColorTemperature(colorTemperature)
 	light.TargetColor = colorTemperatureToXYColor(colorTemperature)
-	if brightness != -1 {
+	if brightness == -1 {
+		light.TargetBrightness = light.CurrentBrightness
+	} else {
 		light.TargetBrightness = mapBrightness(brightness)
 	}
 
@@ -192,7 +194,7 @@ func (light *HueLight) hasChanged() bool {
 }
 
 func (light *HueLight) hasState(colorTemperature int, brightness int) bool {
-	return light.hasColorTemperature(colorTemperature) && light.hasBrightness(brightness)
+	return light.hasColorTemperature(colorTemperature) && (light.hasBrightness(brightness) || brightness == -1)
 }
 
 func (light *HueLight) hasColorTemperature(colorTemperature int) bool {
