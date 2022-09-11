@@ -151,13 +151,11 @@ func (light *HueLight) setLightState(colorTemperature int, brightness int, trans
 		}
 	}
 
-	if brightness != -1 {
-		if brightness == 0 {
-			// Target brightness zero should turn the light off.
-			hueLightState.On = "Off"
-		} else if light.Dimmable {
-			hueLightState.Bri = strconv.Itoa(light.TargetBrightness)
-		}
+	if brightness == 0 {
+		// Target brightness zero should turn the light off.
+		hueLightState.On = "Off"
+	} else if light.Dimmable {
+		hueLightState.Bri = strconv.Itoa(light.TargetBrightness)
 	}
 
 	// Send new state to the light
