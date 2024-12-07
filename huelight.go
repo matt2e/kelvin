@@ -133,10 +133,12 @@ func (light *HueLight) setLightState(colorTemperature int, brightness int, trans
 	// map parameters to target values
 	light.TargetColorTemperature = mapColorTemperature(colorTemperature)
 	light.TargetColor = colorTemperatureToXYColor(colorTemperature)
-	if brightness == -1 {
-		light.TargetBrightness = light.CurrentBrightness
+	var targetBrightness int
+	if light.TargetBrightness == -1 {
+		targetBrightness = light.CurrentBrightness
 	} else {
-		light.TargetBrightness = mapBrightness(brightness)
+		targetBrightness = mapBrightness(brightness)
+		light.TargetBrightness = targetBrightness
 	}
 
 	// Send new state to light bulb
@@ -157,7 +159,7 @@ func (light *HueLight) setLightState(colorTemperature int, brightness int, trans
 		// Target brightness zero should turn the light off.
 		hueLightState.On = "Off"
 	} else if light.Dimmable {
-		hueLightState.Bri = strconv.Itoa(light.TargetBrightness)
+		hueLightState.Bri = strconv.Itoa(targetBrightness)
 	}
 
 	// Send new state to the light
